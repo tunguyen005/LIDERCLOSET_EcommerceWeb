@@ -1,0 +1,235 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Admin.master.cs" Inherits="QuanLyCuaHangLiderCloset.Admin.Admin" %>
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" type="image/png" sizes="16x16" href="../AdminTemplate/assets/images/favicon.png">
+    <title>Admin - LiderCloset</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="../AdminTemplate/assets/extra-libs/c3/c3.min.css" rel="stylesheet">
+    <link href="../AdminTemplate/assets/libs/chartist/dist/chartist.min.css" rel="stylesheet">
+    <link href="../AdminTemplate/assets/extra-libs/jvector/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
+    <link href="../AdminTemplate/dist/css/style.min.css" rel="stylesheet">
+    <link href="../AdminTemplate/datatables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="../AdminTemplate/datatables/css/responsive.bootstrap4.min.css" rel="stylesheet" />
+    <link href="../AdminTemplate/datatables/css/icon-font.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #1a1a1a;
+            --primary-color: #d4af37;
+            --secondary-color: #4a4a4a;
+        }
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --primary-color: #d4af37;
+            --secondary-color: #b0b0b0;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        .topbar, .left-sidebar {
+            background-color: var(--bg-color);
+            border-color: var(--secondary-color);
+        }
+        .sidebar-link {
+            color: var(--text-color);
+        }
+        .sidebar-link:hover {
+            color: var(--primary-color);
+        }
+        .page-title, .breadcrumb-item {
+            color: var(--text-color);
+        }
+        .dropdown-item:hover {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+        }
+        @media (max-width: 768px) {
+            .topbar .navbar-brand {
+                width: 150px;
+            }
+            .sidebar-nav {
+                font-size: 14px;
+            }
+        }
+    </style>
+    <script src="../AdminTemplate/assets/libs/jquery/dist/jquery.min.js"></script>
+    <asp:ContentPlaceHolder ID="head" runat="server" />
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div class="preloader">
+            <div class="lds-ripple">
+                <div class="lds-pos"></div>
+                <div class="lds-pos"></div>
+            </div>
+        </div>
+        <div id="main-wrapper" data-theme="light" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+             data-sidebar-position="fixed" data-header-position="fixed" data-boxed-layout="full">
+            <header class="topbar" data-navbarbg="skin6">
+                <nav class="navbar top-navbar navbar-expand-md">
+                    <div class="navbar-header" data-logobg="skin6">
+                        <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)">
+                            <i class="ti-menu ti-close"></i>
+                        </a>
+                        <div class="navbar-brand">
+                            <a href="Dashboard.aspx">
+                                <b class="logo-icon">
+                                    <img src="../AdminTemplate/assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
+                                    <img src="../AdminTemplate/assets/images/logo-icon.png" alt="homepage" class="light-logo" />
+                                </b>
+                                <span class="logo-text">
+                                    <img src="../AdminTemplate/assets/images/logo-text.png" alt="homepage" class="dark-logo" />
+                                    <img src="../AdminTemplate/assets/images/logo-light-text.png" class="light-logo" alt="homepage" />
+                                </span>
+                            </a>
+                        </div>
+                        <a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)"
+                           data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                           aria-expanded="false" aria-label="Toggle navigation">
+                            <i class="ti-more"></i>
+                        </a>
+                    </div>
+                    <div class="navbar-collapse collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav float-right">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown"
+                                   aria-haspopup="true" aria-expanded="false">
+                                    <asp:Image ID="imgAdmin" runat="server" CssClass="rounded-circle" Width="40" AlternateText="Admin" />
+                                    <span class="ml-2 d-none d-lg-inline-block">
+                                        <span>Xin chào,</span>
+                                        <asp:Label ID="lblAdminName" runat="server" CssClass="text-dark" />
+                                        <i data-feather="chevron-down" class="svg-icon"></i>
+                                    </span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
+                                    <asp:LinkButton ID="lnkLogout" runat="server" CssClass="dropdown-item" OnClick="lnkLogout_Click">
+                                        <i data-feather="power" class="svg-icon mr-2 ml-1"></i> Đăng xuất
+                                    </asp:LinkButton>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </header>
+            <aside class="left-sidebar" data-sidebarbg="skin6">
+                <div class="scroll-sidebar" data-sidebarbg="skin6">
+                    <nav class="sidebar-nav">
+                        <ul id="sidebarnav">
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="Dashboard.aspx" aria-expanded="false">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                    <span class="hide-menu">Bảng điều khiển</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="Category.aspx" aria-expanded="false">
+                                    <i class="fas fa-tag"></i>
+                                    <span class="hide-menu">Danh mục cha</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="SubCategory.aspx" aria-expanded="false">
+                                    <i class="fas fa-tags"></i>
+                                    <span class="hide-menu">Danh mục con</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="Product.aspx" aria-expanded="false">
+                                    <i data-feather="file-text" class="feather-icon"></i>
+                                    <span class="hide-menu">Sản phẩm</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="Users.aspx" aria-expanded="false">
+                                    <i data-feather="users" class="feather-icon"></i>
+                                    <span class="hide-menu">Người dùng</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="SellingReport.aspx" aria-expanded="false">
+                                    <i data-feather="bar-chart-2" class="feather-icon"></i>
+                                    <span class="hide-menu">Báo cáo bán hàng</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="Contact.aspx" aria-expanded="false">
+                                    <i data-feather="mail" class="feather-icon"></i>
+                                    <span class="hide-menu">Liên hệ</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <asp:LinkButton ID="lnkSidebarLogout" runat="server" CssClass="sidebar-link" OnClick="lnkLogout_Click">
+                                    <i data-feather="log-out" class="feather-icon"></i>
+                                    <span class="hide-menu">Đăng xuất</span>
+                                </asp:LinkButton>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </aside>
+            <div class="page-wrapper">
+                <div class="page-breadcrumb">
+                    <div class="row">
+                        <div class="col-7 align-self-center">
+                            <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">
+                                <asp:Label ID="lblBreadCumbTitle" runat="server" Text='<%# Session["breadCumbTitle"] %>' />
+                            </h3>
+                            <div class="d-flex align-items-center">
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb m-0 p-0">
+                                        <li class="breadcrumb-item"><a href="Dashboard.aspx">Bảng điều khiển</a></li>
+                                        <li class="breadcrumb-item text-muted active" aria-current="page">
+                                            <asp:Label ID="lblBreadCumbPage" runat="server" Text='<%# Session["breadCumbPage"] %>' />
+                                        </li>
+                                    </ol>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid">
+                    <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server" />
+                </div>
+                <footer class="footer text-center text-muted">
+                    Bản quyền thuộc về LiderCloset. Thiết kế và phát triển bởi <a href="https://wrappixel.com">WrapPixel</a>.
+                </footer>
+            </div>
+        </div>
+        <script src="../AdminTemplate/assets/libs/popper.js/dist/umd/popper.min.js"></script>
+        <script src="../AdminTemplate/assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="../AdminTemplate/dist/js/app-style-switcher.js"></script>
+        <script src="../AdminTemplate/dist/js/feather.min.js"></script>
+        <script src="../AdminTemplate/assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
+        <script src="../AdminTemplate/dist/js/sidebarmenu.js"></script>
+        <script src="../AdminTemplate/dist/js/custom.min.js"></script>
+        <script src="../AdminTemplate/assets/extra-libs/c3/d3.min.js"></script>
+        <script src="../AdminTemplate/assets/extra-libs/c3/c3.min.js"></script>
+        <script src="../AdminTemplate/assets/libs/chartist/dist/chartist.min.js"></script>
+        <script src="../AdminTemplate/assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script>
+        <script src="../AdminTemplate/assets/extra-libs/jvector/jquery-jvectormap-2.0.2.min.js"></script>
+        <script src="../AdminTemplate/assets/extra-libs/jvector/jquery-jvectormap-world-mill-en.js"></script>
+        <script src="../AdminTemplate/dist/js/pages/dashboards/dashboard1.min.js"></script>
+        <script src="../AdminTemplate/datatables/js/jquery.dataTables.min.js"></script>
+        <script src="../AdminTemplate/datatables/js/dataTables.bootstrap4.min.js"></script>
+        <script src="../AdminTemplate/datatables/js/dataTables.responsive.min.js"></script>
+        <script src="../AdminTemplate/datatables/js/responsive.bootstrap4.min.js"></script>
+        <script src="../AdminTemplate/datatables/js/dataTables.buttons.min.js"></script>
+        <script src="../AdminTemplate/datatables/js/buttons.bootstrap4.min.js"></script>
+        <script src="../AdminTemplate/datatables/js/buttons.print.min.js"></script>
+        <script src="../AdminTemplate/datatables/js/buttons.html5.min.js"></script>
+        <script src="../AdminTemplate/datatables/js/buttons.flash.min.js"></script>
+        <script src="../AdminTemplate/datatables/js/pdfmake.min.js"></script>
+        <script src="../AdminTemplate/datatables/js/vfs_fonts.js"></script>
+        <script src="../AdminTemplate/datatables/js/datatable-setting.js"></script>
+    </form>
+</body>
+</html>
